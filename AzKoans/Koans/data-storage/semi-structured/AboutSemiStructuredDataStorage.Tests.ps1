@@ -3,7 +3,7 @@ using module PSKoans
 param()
 Describe 'Semi-Structured Data Storage' {
     BeforeAll {
-        az deployment sub create --location EastUS --template-file "$PSScriptRoot\main.bicep" --name (get-date).Ticks
+        New-AzSubscriptionDeployment -Location EastUS -TemplateFile "$PSScriptRoot\main.bicep" -Name (get-date).Ticks
     }
 
     It 'foo' {
