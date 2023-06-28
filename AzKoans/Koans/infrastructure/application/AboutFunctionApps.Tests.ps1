@@ -11,10 +11,13 @@ Describe 'Function App' {
 
     Context 'when we look at it' {
         It 'is in a good state' {
-            # https://learn.microsoft.com/en-us/azure/storage/common/storage-account-upgrade?tabs=azure-portal
-            # the previous version didn't have hot and cool access
-
             $functionApp.Status | Should -Be "Running"
+        }
+        
+        It 'renders a page' {
+            $response = Invoke-WebRequest -Uri "https://$fn.azurewebsites.net"
+            $response.StatusCode | Should -Be 200
+            $response.Content | Should -BeLike "*Your Functions 4.0 app is up and running*"
         }
     }
 
