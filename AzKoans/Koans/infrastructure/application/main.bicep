@@ -4,15 +4,14 @@ param functionAppName string
 param tags object
 
 // https://azure.github.io/bicep-registry-modules/#storage
-module storageAccount 'br/public:storage/storage-account:2.0.3' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
   name: storageAccountName
-  params: {
-    location: location
-    name: storageAccountName
-    isZoneRedundant: true
-    enableVNET: false
-    // roleAssignments: [ { roleDefinitionIdOrName: '/providers/Microsoft.Authorization/roleDefinitions/c2f4ef07-c644-48eb-af81-4b1b4947fb11' } ]
+  location: location
+  sku: {
+    name: 'Standard_ZRS'
   }
+  kind: 'StorageV2'
+  properties: {}
 }
 
 // https://azure.github.io/bicep-registry-modules/#compute

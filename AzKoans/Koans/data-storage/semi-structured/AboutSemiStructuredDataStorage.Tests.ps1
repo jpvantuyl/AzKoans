@@ -29,7 +29,7 @@ Describe 'Storage Account' {
     }
 
     AfterAll {
-        $destroy = $true
+        $destroy = $false
         if ($destroy) {
             Get-AzResourceGroup -Name $rg | Remove-AzResourceGroup -Force -Verbose
         }
