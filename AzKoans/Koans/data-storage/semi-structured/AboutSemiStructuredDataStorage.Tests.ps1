@@ -1,9 +1,9 @@
-using module PSKoans
-[Koan(Position = 111)]
-param()
+param($location, $prefix, $uniqueHash)
 Describe 'Semi-Structured Data Storage' {
     BeforeAll {
-        New-AzSubscriptionDeployment -Location EastUS -TemplateFile "$PSScriptRoot\main.bicep" -Name (get-date).Ticks
+        $rg = "$prefix-111-$uniqueHash"
+        New-AzResourceGroup -Location $location -Name $rg -Verbose
+        New-AzResourceGroupDeployment -TemplateFile "$PSScriptRoot\main.bicep" -Name (get-date).Ticks -ResourceGroupName $rg -Verbose
     }
 
     It 'foo' {
@@ -13,7 +13,7 @@ Describe 'Semi-Structured Data Storage' {
     AfterAll {
         $destroy = $true
         if ($destroy) {
-            # Get-AzResourceGroup -Name "ContosoRG01" | Remove-AzResourceGroup -Force
+            Get-AzResourceGroup -Name $rg | Remove-AzResourceGroup -Force
         }
     }
 }

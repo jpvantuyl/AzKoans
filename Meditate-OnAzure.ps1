@@ -13,13 +13,17 @@ Update-Module Pester
 # https://learn.microsoft.com/en-us/powershell/azure/install-azps-windows?view=azps-10.0.0&tabs=powershell&pivots=windows-psgallery
 if (-not (Get-Module -Name Az -ListAvailable)) {
     Write-Warning "PowerShell module 'Az' not found.  Installing...`n"
+    pause
     Install-Module -Name Az -Repository PSGallery -Force
+    # Update-Module -Name Az -Force
 }
 try {
     bicep --version
 }
 catch {
     Write-Warning "Bicep CLI not found.  Installing...`n"
+    pause
+
     # https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install#install-manually
     # Create the install folder
     $installPath = "$env:USERPROFILE\.bicep"
@@ -37,22 +41,33 @@ catch {
 }
 
 
-# Update-Module -Name Az -Force
-# Connect-AzAccount -Subscription "b7445981-7fd4-4c5b-831c-41a5bc4900d0"
+$config = Get-Content "$PSScriptRoot\config.json" | ConvertFrom-Json -AsHashtable
+
+if ((get-azcontext).subscription.id -ne $config.subscriptionId) {
+    Write-Warning "Not connected to subscription '$($config.subscriptionId)'.  Authenticating...`n"
+    pause
+
+    Connect-AzAccount -Subscription $config.subscriptionId
+}
 # Get-AzContext -ListAvailable
 # Set-AzContext
 
-if (-not ('KoanAttribute' -as [type])) {
+# if (-not ('KoanAttribute' -as [type])) {
     
-    Add-Type -TypeDefinition @'
-using System;
+#     Add-Type -TypeDefinition @'
+# using System;
 
-public class KoanAttribute : Attribute
-{
-    public uint Position = UInt32.MaxValue;
-    public string Module = "_powershell";
+# public class KoanAttribute : Attribute
+# {
+#     public uint Position = UInt32.MaxValue;
+#     public string Module = "_powershell";
+# }
+# '@
+# }
+$uniqueHash = (Get-FileHash -Path "$PSScriptRoot\config.json").Hash.Substring(0,4)
+$container = New-PesterContainer -Path . -Data @{ 
+    location   = $config.location; 
+    prefix     = $config.prefix; 
+    uniqueHash = $uniqueHash; 
 }
-'@
-}
-
-Invoke-Pester
+Invoke-Pester -Container $container
