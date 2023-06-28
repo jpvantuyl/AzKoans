@@ -1,7 +1,9 @@
 // https://azure.github.io/bicep-registry-modules/#storage
 @description('Specifies the location for resources.')
-param location string = 'eastus'
-param uniqueHash string = uniqueString(az.subscription().subscriptionId)
+param location string
+param resourceGroupName string
+param prefix string
+param uniqueHash string
 
 
 // param name string = 
@@ -10,10 +12,10 @@ param uniqueHash string = uniqueString(az.subscription().subscriptionId)
 param isZoneRedundant bool = true
 
 module storageAccount 'br/public:storage/storage-account:2.0.3' = {
-  name: 'azkoansstorage${uniqueHash}'
+  name: '${prefix}st${uniqueHash}'
   params: {
     location: location
-    name: 'azkoansst${uniqueHash}'
+    name: '${prefix}st${uniqueHash}'
     isZoneRedundant: isZoneRedundant
   }
 }
