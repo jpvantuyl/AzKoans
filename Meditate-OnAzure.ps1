@@ -64,10 +64,11 @@ if ((get-azcontext).subscription.id -ne $config.subscriptionId) {
 # }
 # '@
 # }
-$uniqueHash = (Get-FileHash -Path "$PSScriptRoot\config.json").Hash.Substring(0,4).ToLower()
+$uniqueHash = (Get-FileHash -Path "$PSScriptRoot\config.json").Hash.Substring(0, 4).ToLower()
 $container = New-PesterContainer -Path . -Data @{ 
     location   = $config.location; 
     prefix     = $config.prefix; 
-    uniqueHash = $uniqueHash; 
+    uniqueHash = $uniqueHash;
+    tags       = $config.tags;
 }
 Invoke-Pester -Container $container

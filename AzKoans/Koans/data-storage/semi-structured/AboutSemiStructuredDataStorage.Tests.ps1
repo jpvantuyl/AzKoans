@@ -1,10 +1,10 @@
-param($location, $prefix, $uniqueHash)
+param($location, $prefix, $uniqueHash, $tags)
 Describe 'Storage Account' {
     BeforeAll {
         $rg = "$prefix-111-$uniqueHash"
-        $st = "$($prefix)st$uniqueHash"
-        if ((Get-AzResourceGroup -Name $rg).ProvisioningState -ne "Succeeded") {New-AzResourceGroup -Location $location -Name $rg -Verbose}
-        New-AzResourceGroupDeployment -TemplateFile "$PSScriptRoot\main.bicep" -Name (get-date).Ticks -ResourceGroupName $rg -Verbose -TemplateParameterObject @{ location = $location; storageAccountName = $st }
+        $st = "$($prefix)111st$uniqueHash"
+        if ("$((Get-AzResourceGroup -Name $rg).ProvisioningState)" -ne "Succeeded") {New-AzResourceGroup -Location $location -Name $rg -Tag $tags -Verbose}
+        New-AzResourceGroupDeployment -TemplateFile "$PSScriptRoot\main.bicep" -Name (get-date).Ticks -ResourceGroupName $rg -Tag $tags -Verbose -TemplateParameterObject @{ location = $location; storageAccountName = $st; }
         $storageAccount = Get-AzStorageAccount -ResourceGroupName $rg -Name $st
     }
 

@@ -10,5 +10,3 @@ module storageAccount 'br/public:storage/storage-account:2.0.3' = {
     isZoneRedundant: true
   }
 }
-
-output storageAccountID string = storageAccount.outputs.id
