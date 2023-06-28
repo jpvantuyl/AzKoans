@@ -9,4 +9,11 @@ Describe 'Semi-Structured Data Storage' {
     It 'foo' {
         $true | Should -Be $true
     }
+
+    AfterAll {
+        $destroy = $true
+        if ($destroy) {
+            # Get-AzResourceGroup -Name "ContosoRG01" | Remove-AzResourceGroup -Force
+        }
+    }
 }
