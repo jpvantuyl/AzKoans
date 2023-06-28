@@ -1,5 +1,5 @@
-Set-PSRepository PSGallery -InstallationPolicy Trusted
-Update-Module Pester
+# Set-PSRepository PSGallery -InstallationPolicy Trusted
+# Update-Module Pester
 # Install-Module Pester -Scope CurrentUser -MinimumVersion 5.0.2 -Force
 # Install-Module PSKoans -Scope CurrentUser
 
@@ -9,6 +9,7 @@ Update-Module Pester
 # az account set --subscription b7445981-7fd4-4c5b-831c-41a5bc4900d0
 # az bicep install
 # az bicep upgrade
+
 
 # https://learn.microsoft.com/en-us/powershell/azure/install-azps-windows?view=azps-10.0.0&tabs=powershell&pivots=windows-psgallery
 if (-not (Get-Module -Name Az -ListAvailable)) {
@@ -65,6 +66,14 @@ if ((get-azcontext).subscription.id -ne $config.subscriptionId) {
 # '@
 # }
 $uniqueHash = (Get-FileHash -Path "$PSScriptRoot\config.json").Hash.Substring(0, 4).ToLower()
+function Contemplate-AzResources {
+    param($rg,$templateFile,$parameters)
+
+    if ($null -eq (Get-AzResourceGroup -Name $rg)) {
+        New-AzResourceGroup -Location $config.location -Name $rg -Tag $config.tags -Verbose
+    }
+    New-AzResourceGroupDeployment -TemplateFile $templateFile -Name (get-date).Ticks -ResourceGroupName $rg -Verbose -TemplateParameterObject $parameters
+}
 $container = New-PesterContainer -Path . -Data @{ 
     location   = $config.location; 
     prefix     = $config.prefix; 

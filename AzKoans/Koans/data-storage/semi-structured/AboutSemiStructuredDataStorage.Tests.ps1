@@ -3,8 +3,15 @@ Describe 'Storage Account' {
     BeforeAll {
         $rg = "$prefix-111-$uniqueHash"
         $st = "$($prefix)111st$uniqueHash"
-        if ("$((Get-AzResourceGroup -Name $rg).ProvisioningState)" -ne "Succeeded") {New-AzResourceGroup -Location $location -Name $rg -Tag $tags -Verbose}
-        New-AzResourceGroupDeployment -TemplateFile "$PSScriptRoot\main.bicep" -Name (get-date).Ticks -ResourceGroupName $rg -Tag $tags -Verbose -TemplateParameterObject @{ location = $location; storageAccountName = $st; }
+        $splat = @{
+            rg = $rg
+            templateFile = "$PSScriptRoot\main.bicep"
+            parameters = @{
+                location = $location
+                storageAccountName = $st
+            }
+        }
+        Contemplate-AzResources @splat
         $storageAccount = Get-AzStorageAccount -ResourceGroupName $rg -Name $st
     }
 

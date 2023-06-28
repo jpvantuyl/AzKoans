@@ -4,8 +4,17 @@ Describe 'Function App' {
         $rg = "$prefix-311-$uniqueHash"
         $st = "$($prefix)311st$uniqueHash"
         $fn = "$($prefix)-311-fn-$uniqueHash"
-        if ("$((Get-AzResourceGroup -Name $rg).ProvisioningState)" -ne "Succeeded") {New-AzResourceGroup -Location $location -Name $rg -Tag $tags -Verbose}
-        New-AzResourceGroupDeployment -TemplateFile "$PSScriptRoot\main.bicep" -Name (get-date).Ticks -ResourceGroupName $rg -Verbose -TemplateParameterObject @{ location = $location; storageAccountName = $st; functionAppName = $fn; tags = $tags }
+        $splat = @{
+            rg = $rg
+            templateFile = "$PSScriptRoot\main.bicep"
+            parameters = @{
+                location = $location
+                storageAccountName = $st
+                functionAppName = $fn
+                tags = $tags
+            }
+        }
+        Contemplate-AzResources @splat
         $functionApp = Get-AzFunctionApp -ResourceGroupName $rg -Name $fn
     }
 
