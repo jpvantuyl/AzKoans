@@ -1,26 +1,14 @@
-// https://azure.github.io/bicep-registry-modules/#storage
-@description('Specifies the location for resources.')
 param location string
-param resourceGroupName string
-param prefix string
-param uniqueHash string
+param storageAccountName string
 
-
-// param name string = 
-// param newOrExisting string = 'new'
-// param resourceGroupName string = 'myresourcegroup'
-param isZoneRedundant bool = true
-
+// https://azure.github.io/bicep-registry-modules/#storage
 module storageAccount 'br/public:storage/storage-account:2.0.3' = {
-  name: '${prefix}st${uniqueHash}'
+  name: storageAccountName
   params: {
     location: location
-    name: '${prefix}st${uniqueHash}'
-    isZoneRedundant: isZoneRedundant
+    name: storageAccountName
+    isZoneRedundant: true
   }
 }
 
 output storageAccountID string = storageAccount.outputs.id
-
-
-
