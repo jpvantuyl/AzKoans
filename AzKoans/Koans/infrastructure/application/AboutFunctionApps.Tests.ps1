@@ -10,11 +10,11 @@ Describe 'Function App' {
     }
 
     Context 'when we look at it' {
-        It 'is using the latest storage version' {
+        It 'is in a good state' {
             # https://learn.microsoft.com/en-us/azure/storage/common/storage-account-upgrade?tabs=azure-portal
             # the previous version didn't have hot and cool access
 
-            $storageAccount.Kind | Should -Be "StorageV2"
+            $functionApp.Status | Should -Be "Running"
         }
     }
 
