@@ -69,7 +69,8 @@ $uniqueHash = (Get-FileHash -Path "$PSScriptRoot\config.json").Hash.Substring(0,
 function Contemplate-AzResources {
     param($rg,$templateFile,$parameters)
 
-    if ($null -eq (Get-AzResourceGroup -Name $rg)) {
+    $existing = Get-AzResourceGroup -Name "$rg*"
+    if ($null -eq $existing) {
         New-AzResourceGroup -Location $config.location -Name $rg -Tag $config.tags -Verbose
     }
     New-AzResourceGroupDeployment -TemplateFile $templateFile -Name (get-date).Ticks -ResourceGroupName $rg -Verbose -TemplateParameterObject $parameters
