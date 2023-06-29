@@ -1,7 +1,6 @@
-param($location, $prefix, $uniqueHash, $tags)
+param($num, $location, $prefix, $uniqueHash, $tags)
 Describe 'Function App' {
     BeforeAll {
-        $num = $MyInvocation.MyCommand.ScriptBlock.File.Split([IO.Path]::DirectorySeparatorChar)[-1].Substring(0,3)
         $rg = "$prefix-$num-$uniqueHash"
         $st = "$prefix$($num)st$uniqueHash"
         $fn = "$($prefix)-$num-fn-$uniqueHash"

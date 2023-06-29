@@ -308,8 +308,10 @@ who can laugh in the darkness.
 $koans = Get-ChildItem -Path . -Include *.Tests.ps1 -Recurse
 $koans | ForEach-Object {
     $koan = $_
+    $num = $koan.Name.Substring(0, 3)
 
-    $container = New-PesterContainer -Path $koan -Data @{ 
+    $container = New-PesterContainer -Path $koan -Data @{
+        num        = $num
         location   = $config.location;
         prefix     = $config.prefix;
         uniqueHash = $uniqueHash;
