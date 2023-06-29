@@ -1,8 +1,9 @@
 param($location, $prefix, $uniqueHash, $tags)
 Describe 'Storage Account' {
     BeforeAll {
-        $rg = "$prefix-111-$uniqueHash"
-        $st = "$($prefix)111st$uniqueHash"
+        $num = $MyInvocation.MyCommand.ScriptBlock.File.Split([IO.Path]::DirectorySeparatorChar)[-1].Substring(0,3)
+        $rg = "$prefix-$num-$uniqueHash"
+        $st = "$prefix$($num)st$uniqueHash"
         $splat = @{
             rg = $rg
             templateFile = "$PSScriptRoot\main.bicep"

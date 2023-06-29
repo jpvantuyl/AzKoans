@@ -1,9 +1,10 @@
 param($location, $prefix, $uniqueHash, $tags)
 Describe 'Function App' {
     BeforeAll {
-        $rg = "$prefix-311-$uniqueHash"
-        $st = "$($prefix)311st$uniqueHash"
-        $fn = "$($prefix)-311-fn-$uniqueHash"
+        $num = $MyInvocation.MyCommand.ScriptBlock.File.Split([IO.Path]::DirectorySeparatorChar)[-1].Substring(0,3)
+        $rg = "$prefix-$num-$uniqueHash"
+        $st = "$prefix$($num)st$uniqueHash"
+        $fn = "$($prefix)-$num-fn-$uniqueHash"
         $splat = @{
             rg = $rg
             templateFile = "$PSScriptRoot\main.bicep"
