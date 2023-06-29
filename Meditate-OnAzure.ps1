@@ -75,6 +75,7 @@ function Contemplate-AzResources {
     }
     New-AzResourceGroupDeployment -TemplateFile $templateFile -Name (get-date).Ticks -ResourceGroupName $rg -Verbose -TemplateParameterObject $parameters
 }
+
 $container = New-PesterContainer -Path . -Data @{ 
     location   = $config.location; 
     prefix     = $config.prefix; 

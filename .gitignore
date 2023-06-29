@@ -1,1 +1,4 @@
 .vscode/
+
+# users need to customize this for themselves
+config.json
