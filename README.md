@@ -1,4 +1,4 @@
-# AZ-305
+# AzKoans
 
 Microsoft has a certification for [Azure architecture](https://learn.microsoft.com/en-us/certifications/azure-solutions-architect/) and a [learning path](https://learn.microsoft.com/en-us/training/paths/microsoft-azure-architect-design-prerequisites/).
 
