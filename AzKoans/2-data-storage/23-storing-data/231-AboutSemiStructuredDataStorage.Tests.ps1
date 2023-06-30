@@ -1,4 +1,3 @@
-param($num, $location, $prefix, $uniqueHash, $tags)
 Describe 'Storage Account' {
     BeforeAll {
         $rg = "$prefix-$num-$uniqueHash"

@@ -1,4 +1,3 @@
-param($num, $location, $prefix, $uniqueHash, $tags)
 Describe 'Function App' {
     BeforeAll {
         $rg = "$prefix-$num-$uniqueHash"

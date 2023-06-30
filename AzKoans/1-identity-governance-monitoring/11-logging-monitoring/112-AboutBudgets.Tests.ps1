@@ -1,20 +1,20 @@
-Describe 'Cost Analysis' {
+Describe 'Budgets' {
     BeforeAll {
         $rg = "$prefix-$num-$uniqueHash"
         $splat = @{
             rg           = $rg
             templateFile = "$PSScriptRoot\$num.bicep"
             parameters   = @{
-                email = $email
+                startDt = (Get-Date).ToString("yyyy-MM-01")
             }
         }
         Contemplate-AzResources @splat
-        $costManagementReport = Invoke-AzCostManagementQuery -Scope (Get-AzResourceGroup -Name $rg).ResourceId -Timeframe MonthToDate -Type Usage -DatasetGranularity 'Daily'
+        $budget = Get-AzConsumptionBudget
     }
 
-    It 'sends daily cost alerts' {
-        $____ = "2023"
-        $costManagementReport.Row[0][0] | Should -BeLike "*$____*"
+    It 'have a limit set' {
+        $budget.Amount | Should -Be 100
+        $budget.TimeGrain | Should -Be Monthly
     }
 
     AfterAll {
