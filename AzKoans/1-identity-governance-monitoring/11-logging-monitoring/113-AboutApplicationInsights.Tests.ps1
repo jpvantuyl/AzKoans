@@ -1,20 +1,24 @@
-Describe 'Budgets' {
+Describe 'Application Insights' {
     BeforeAll {
         $rg = "$prefix-$num-$uniqueHash"
+        $ap = "$rg-app"
+        $appInsightName = "$ap-appi"
         $splat = @{
             rg           = $rg
             templateFile = "$PSScriptRoot\$num.bicep"
             parameters   = @{
-                startDt = (Get-Date).ToString("yyyy-MM-01")
+                location       = $location
+                appName        = $ap
+                appInsightName = $appInsightName
+                email          = $email
             }
         }
         Contemplate-AzResources @splat
-        $budget = Get-AzConsumptionBudget
+        $applicationInsights = Get-AzApplicationInsights -Name $appInsightName -ResourceGroupName $rg -Full
     }
 
-    It 'have a limit set' {
-        $budget.Amount | Should -Be 100
-        $budget.TimeGrain | Should -Be Monthly
+    It 'should be capped' {
+        $applicationInsights.IsCapped | Should -Be $false
     }
 
     AfterAll {

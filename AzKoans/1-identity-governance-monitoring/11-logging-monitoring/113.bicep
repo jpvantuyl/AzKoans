@@ -1,20 +1,21 @@
 // https://learn.microsoft.com/en-us/azure/templates/microsoft.insights/components?pivots=deployment-language-bicep
-param skuName string = 'S1'
-param skuCapacity int = 1
 param location string
 param appName string
+param appInsightName string
+param email string
+
 
 var appServicePlanName = toLower('${appName}-asp')
 var webSiteName = toLower('${appName}-wapp')
-var appInsightName = toLower('${appName}-appi')
 var logAnalyticsName = toLower('${appName}-la')
+var responseAlertName = '${toLower(appInsightName)}-ResponseTime'
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   name: appServicePlanName
   location: location
   sku: {
-    name: skuName
-    capacity: skuCapacity
+    name: 'S1'
+    capacity: 1
   }
   tags: {
     displayName: 'HostingPlan'
@@ -121,14 +122,6 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-08
   }
 }
 
-param responseTimeThreshold int = 3
-param workspaceName string = 'myWorkspace'
-
-@description('Name of the application insights resource.')
-param applicationInsightsName string = 'myApplicationInsights'
-
-var responseAlertName = 'ResponseTime-${toLower(applicationInsightsName)}'
-
 resource metricAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
   name: responseAlertName
   location: 'global'
@@ -137,7 +130,7 @@ resource metricAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
     severity: 0
     enabled: true
     scopes: [
-      applicationInsights.id
+      appInsights.id
     ]
     evaluationFrequency: 'PT1M'
     windowSize: 'PT5M'
@@ -148,7 +141,7 @@ resource metricAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
           name: '1st criterion'
           metricName: 'requests/duration'
           operator: 'GreaterThan'
-          threshold: responseTimeThreshold
+          threshold: 3
           timeAggregation: 'Average'
           criterionType: 'StaticThresholdCriterion'
         }
@@ -171,7 +164,7 @@ resource emailActionGroup 'microsoft.insights/actionGroups@2019-06-01' = {
     emailReceivers: [
       {
         name: 'Example'
-        emailAddress: 'example@test.com'
+        emailAddress: email
         useCommonAlertSchema: true
       }
     ]
