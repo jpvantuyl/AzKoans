@@ -1,15 +1,18 @@
 Describe 'Budgets' {
     BeforeAll {
         $rg = "$prefix-$num-$uniqueHash"
+        $bn = "$prefix-$num-$uniqueHash-budget"
         $splat = @{
             rg           = $rg
             templateFile = "$PSScriptRoot\$num.bicep"
             parameters   = @{
-                startDt = (Get-Date).ToString("yyyy-MM-01")
+                budgetName = $bn
+                startDt    = (Get-Date).ToString("yyyy-MM-01")
             }
         }
         Contemplate-AzResources @splat
-        $budget = Get-AzConsumptionBudget
+        $response = Invoke-WebRequest -UseBasicParsing "https://management.azure.com/subscriptions/$($config.subscriptionId)/resourceGroups/$rg/providers/Microsoft.Consumption/budgets?api-version=2021-10-01" -Method GET -Headers @{"Authorization" = "Bearer $((Get-AzAccessToken).Token)" }
+        $budget = (($response.content | ConvertFrom-Json).value | ? {$_.name -eq 'jpvant-112-b451-budget'}).properties
     }
 
     It 'have a limit set' {

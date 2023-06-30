@@ -47,7 +47,7 @@ if ((get-azcontext).subscription.id -ne $config.subscriptionId) {
     Connect-AzAccount -Subscription $config.subscriptionId
 }
 
-$email = (Get-AzContext -ListAvailable).Account.Id
+$email = (Get-AzContext -ListAvailable | select -first 1).Account.Id
 $uniqueHash = (Get-FileHash -Path "$PSScriptRoot\config.json").Hash.Substring(0, 4).ToLower()
 function Contemplate-AzResources {
     param($rg, $templateFile, $parameters)
