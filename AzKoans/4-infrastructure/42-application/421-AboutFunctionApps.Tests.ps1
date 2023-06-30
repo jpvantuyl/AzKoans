@@ -19,13 +19,13 @@ Describe 'Function App' {
     }
 
     It 'is in a good state' {
-        $functionApp.Status | Should -Be $____
+        $functionApp.Status | Should -Be "Running"
     }
         
     It 'renders a page' {
         $response = Invoke-WebRequest -Uri "https://$fn.azurewebsites.net"
-        $response.StatusCode | Should -Be $____
-        $response.Content | Should -BeLike "*mountains are merely mountains*"
+        $response.StatusCode | Should -Be 200
+        $response.Content | Should -BeLike "*Azure Functions is an event-based serverless compute experience to accelerate your development*"
     }
 
     AfterAll {

@@ -304,7 +304,7 @@ who can laugh in the darkness.
 '@
 )
 
-
+$PassedCount = 0
 $koans = Get-ChildItem -Path . -Include *.Tests.ps1 -Recurse
 $koans | ForEach-Object {
     $koan = $_
@@ -332,7 +332,23 @@ $koans | ForEach-Object {
 $($meditations | Get-Random)
 
 "@ -ForegroundColor Blue
-        break;
+
+        exit;
     }
+
+    $PassedCount += $results.PassedCount
 }
+
+
+
+Write-Host "`nYou have completed all $PassedCount AzKoans`n" -ForegroundColor Green
+Write-Host "`nPlease delete any Azure infrastructure you no longer need`n" -ForegroundColor Yellow
+Write-Host @"
+
+“Before one studies Zen, mountains are mountains and waters are waters;
+after a first glimpse into the truth of Zen, mountains are no longer mountains and waters are no longer waters;
+after enlightenment, mountains are once again mountains and waters once again waters.”
+― Dōgen
+
+"@ -ForegroundColor Blue
     
