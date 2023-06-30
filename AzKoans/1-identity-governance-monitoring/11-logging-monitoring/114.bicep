@@ -29,6 +29,10 @@ resource alert 'Microsoft.Insights/activityLogAlerts@2020-10-01' = {
     condition: {
       allOf: [
         {
+          field: 'category'
+          equals: 'ResourceHealth'
+        }
+        {
           field: 'status'
           equals: 'Active'
         }
@@ -48,7 +52,7 @@ resource symbolicname 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: '${alertName}-kv'
   location: resourceGroup().location
   properties: {
-    enablePurgeProtection: false
+    accessPolicies: []
     enableRbacAuthorization: false
     enableSoftDelete: false
     sku: {

@@ -64,7 +64,9 @@ function Contemplate-AzResources {
     if ($null -eq $existing.Tags["Thinking"]) {
         Write-Host "`n" -ForegroundColor Green
         New-AzResourceGroupDeployment -TemplateFile $templateFile -Name (get-date).Ticks -ResourceGroupName $rg -Verbose -TemplateParameterObject $parameters
-        $existing | New-AzTag -Tag @{ Thinking = "Done" } -Verbose
+        $tags = $existing.Tags
+        $tags.Add("Thinking", "Done")
+        $existing | New-AzTag -Tag $tags -Verbose
     }
 }
 
