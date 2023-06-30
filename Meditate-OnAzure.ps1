@@ -68,11 +68,17 @@ function Contemplate-AzResources {
     param($rg, $templateFile, $parameters)
 
     Write-Host "`nContemplating $rg`n" -ForegroundColor Green
+    
     $existing = Get-AzResourceGroup -Name "*$rg"
     if ($null -eq $existing) {
         New-AzResourceGroup -Location $config.location -Name $rg -Tag $config.tags -Verbose
+        $existing = Get-AzResourceGroup -Name "*$rg"
     }
-    New-AzResourceGroupDeployment -TemplateFile $templateFile -Name (get-date).Ticks -ResourceGroupName $rg -Verbose -TemplateParameterObject $parameters
+
+    if ($null -eq $existing.Tags["Thinking"]) {
+        New-AzResourceGroupDeployment -TemplateFile $templateFile -Name (get-date).Ticks -ResourceGroupName $rg -Verbose -TemplateParameterObject $parameters
+        $existing | New-AzTag -Tag @{ Thinking = "Done" } -Verbose
+    }
 }
 
 $meditations = @(
