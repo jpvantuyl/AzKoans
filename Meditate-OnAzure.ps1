@@ -67,15 +67,17 @@ $uniqueHash = (Get-FileHash -Path "$PSScriptRoot\config.json").Hash.Substring(0,
 function Contemplate-AzResources {
     param($rg, $templateFile, $parameters)
 
-    Write-Host "`nContemplating $rg`n" -ForegroundColor Green
+    Write-Host "`nContemplating $rg" -ForegroundColor Green
     
     $existing = Get-AzResourceGroup -Name "*$rg"
     if ($null -eq $existing) {
+        Write-Host "`n" -ForegroundColor Green
         New-AzResourceGroup -Location $config.location -Name $rg -Tag $config.tags -Verbose
         $existing = Get-AzResourceGroup -Name "*$rg"
     }
-
+    
     if ($null -eq $existing.Tags["Thinking"]) {
+        Write-Host "`n" -ForegroundColor Green
         New-AzResourceGroupDeployment -TemplateFile $templateFile -Name (get-date).Ticks -ResourceGroupName $rg -Verbose -TemplateParameterObject $parameters
         $existing | New-AzTag -Tag @{ Thinking = "Done" } -Verbose
     }
