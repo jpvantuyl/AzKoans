@@ -1,15 +1,10 @@
 # Set-PSRepository PSGallery -InstallationPolicy Trusted
-# Update-Module Pester
-# Install-Module Pester -Scope CurrentUser -MinimumVersion 5.0.2 -Force
-# Install-Module PSKoans -Scope CurrentUser
-
-# https://learn.microsoft.com/en-us/cli/azure/install-azure-cli
-# az login
-# az account list
-# az account set --subscription b7445981-7fd4-4c5b-831c-41a5bc4900d0
-# az bicep install
-# az bicep upgrade
-
+if (-not ((Get-Module -Name Pester -ListAvailable) -or (Get-Module -Name Pester -ListAvailable).Version.Major -ge 5)) {
+    Write-Warning "PowerShell module 'Pester' not found.  Installing...`n"
+    pause
+    Install-Module -Name Pester -Scope CurrentUser -MinimumVersion 5.0.2 -Repository PSGallery -Force
+    # Update-Module -Name Pester -Force
+}
 
 # https://learn.microsoft.com/en-us/powershell/azure/install-azps-windows?view=azps-10.0.0&tabs=powershell&pivots=windows-psgallery
 if (-not (Get-Module -Name Az -ListAvailable)) {
@@ -48,21 +43,8 @@ if ((get-azcontext).subscription.id -ne $config.subscriptionId) {
 
     Connect-AzAccount -Subscription $config.subscriptionId
 }
-# Get-AzContext -ListAvailable
-# Set-AzContext
 
-# if (-not ('KoanAttribute' -as [type])) {
-    
-#     Add-Type -TypeDefinition @'
-# using System;
-
-# public class KoanAttribute : Attribute
-# {
-#     public uint Position = UInt32.MaxValue;
-#     public string Module = "_powershell";
-# }
-# '@
-# }
+$email = (Get-AzContext -ListAvailable).Account.Id
 $uniqueHash = (Get-FileHash -Path "$PSScriptRoot\config.json").Hash.Substring(0, 4).ToLower()
 function Contemplate-AzResources {
     param($rg, $templateFile, $parameters)
@@ -323,6 +305,7 @@ $koans | ForEach-Object {
         location   = $config.location;
         prefix     = $config.prefix;
         uniqueHash = $uniqueHash;
+        email      = $email;
         tags       = $config.tags;
     }
     $results = Invoke-Pester -Container $container -Output None -PassThru
@@ -335,11 +318,7 @@ $koans | ForEach-Object {
         Write-Host $errRecord.TargetObject.Message -ForegroundColor Red
         Write-Host "  at $($errRecord.TargetObject.File):$($errRecord.TargetObject.Line)" -ForegroundColor Red
         Write-Host $errRecord.TargetObject.LineText -ForegroundColor Red
-        Write-Host @"
-
-$($meditations | Get-Random)
-
-"@ -ForegroundColor Blue
+        Write-Host "`n`n$($meditations | Get-Random)`n`n" -ForegroundColor Blue
 
         exit;
     }
