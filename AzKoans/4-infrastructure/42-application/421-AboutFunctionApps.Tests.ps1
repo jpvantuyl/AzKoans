@@ -5,29 +5,27 @@ Describe 'Function App' {
         $st = "$prefix$($num)st$uniqueHash"
         $fn = "$($prefix)-$num-fn-$uniqueHash"
         $splat = @{
-            rg = $rg
+            rg           = $rg
             templateFile = "$PSScriptRoot\main.bicep"
-            parameters = @{
-                location = $location
+            parameters   = @{
+                location           = $location
                 storageAccountName = $st
-                functionAppName = $fn
-                tags = $tags
+                functionAppName    = $fn
+                tags               = $tags
             }
         }
         Contemplate-AzResources @splat
         $functionApp = Get-AzFunctionApp -ResourceGroupName $rg -Name $fn
     }
 
-    Context 'when we look at it' {
-        It 'is in a good state' {
-            $functionApp.Status | Should -Be "Running"
-        }
+    It 'is in a good state' {
+        $functionApp.Status | Should -Be $____
+    }
         
-        It 'renders a page' {
-            $response = Invoke-WebRequest -Uri "https://$fn.azurewebsites.net"
-            $response.StatusCode | Should -Be 200
-            $response.Content | Should -BeLike "*Your Functions 4.0 app is up and running*"
-        }
+    It 'renders a page' {
+        $response = Invoke-WebRequest -Uri "https://$fn.azurewebsites.net"
+        $response.StatusCode | Should -Be $____
+        $response.Content | Should -BeLike "*mountains are merely mountains*"
     }
 
     AfterAll {
