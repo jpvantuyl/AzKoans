@@ -19,18 +19,18 @@ Describe 'Storage Account' {
         # https://learn.microsoft.com/en-us/azure/storage/common/storage-account-upgrade?tabs=azure-portal
         # the previous version didn't have hot and cool access
 
-        $storageAccount.Kind | Should -Be $____
+        $storageAccount.Kind | Should -Be "StorageV2"
     }
 
     It 'is zone redundant' {
-        $storageAccount.Sku.Name | Should -Be $____
+        $storageAccount.Sku.Name | Should -Be "Standard_ZRS"
             
         # zone redundant storage copies data across 3 availability zones in the region
         # https://learn.microsoft.com/en-us/azure/storage/common/storage-redundancy#redundancy-in-the-primary-region
     }
 
     It 'does not have public access from the internet' {
-        $storageAccount.PublicNetworkAccess | Should -Be $____
+        $storageAccount.PublicNetworkAccess | Should -Be "Disabled"
     }
 
     AfterAll {
