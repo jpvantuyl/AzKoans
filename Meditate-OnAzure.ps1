@@ -14,6 +14,13 @@ if (-not (Get-Module -Name Az -ListAvailable)) {
     # Update-Module -Name Az -Force
 }
 
+if (-not (Get-Module -Name Az.CostManagement -ListAvailable)) {
+    Write-Warning "PowerShell module 'Az.CostManagement' not found.  Installing...`n"
+    pause
+    Install-Module -Name Az.CostManagement -Repository PSGallery -Force
+    # Update-Module -Name Az.CostManagement -Force
+}
+
 if (-not (Test-Path "$env:USERPROFILE\.bicep")) {
     Write-Warning "Bicep CLI not found.  Installing...`n"
     pause

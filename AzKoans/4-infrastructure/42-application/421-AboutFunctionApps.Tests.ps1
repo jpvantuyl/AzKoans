@@ -6,7 +6,7 @@ Describe 'Function App' {
         $fn = "$($prefix)-$num-fn-$uniqueHash"
         $splat = @{
             rg           = $rg
-            templateFile = "$PSScriptRoot\main.bicep"
+            templateFile = "$PSScriptRoot\$num.bicep"
             parameters   = @{
                 location           = $location
                 storageAccountName = $st
