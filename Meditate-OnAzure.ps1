@@ -7,18 +7,14 @@ if (-not ((Get-Module -Name Pester -ListAvailable) -or (Get-Module -Name Pester 
 }
 
 # https://learn.microsoft.com/en-us/powershell/azure/install-azps-windows?view=azps-10.0.0&tabs=powershell&pivots=windows-psgallery
-if (-not (Get-Module -Name Az -ListAvailable)) {
-    Write-Warning "PowerShell module 'Az' not found.  Installing...`n"
-    pause
-    Install-Module -Name Az -Repository PSGallery -Force
-    # Update-Module -Name Az -Force
-}
-
-if (-not (Get-Module -Name Az.CostManagement -ListAvailable)) {
-    Write-Warning "PowerShell module 'Az.CostManagement' not found.  Installing...`n"
-    pause
-    Install-Module -Name Az.CostManagement -Repository PSGallery -Force
-    # Update-Module -Name Az.CostManagement -Force
+$requiredModules = @('Az', 'Az.CostManagement')
+$requiredModules | ForEach-Object {
+    if (-not (Get-Module -Name $_ -ListAvailable)) {
+        Write-Warning "PowerShell module '$_' not found.  Installing...`n"
+        pause
+        Install-Module -Name $_ -Repository PSGallery -Force
+        # Update-Module -Name $_ -Force
+    }
 }
 
 if (-not (Test-Path "$env:USERPROFILE\.bicep")) {
