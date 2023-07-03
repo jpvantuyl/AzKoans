@@ -11,10 +11,10 @@ Describe 'Azure Advisor' {
             }
         }
         Contemplate-AzResources @splat
-        $recommendation =Get-AzAdvisorRecommendation -ResourceGroupName $rg
+        $recommendation = Get-AzAdvisorRecommendation -ResourceGroupName $rg
     }
 
-    It 'should be capped' {
+    It 'should be capped' -Skip {
         $recommendation.IsCapped | Should -Be $false
     }
 

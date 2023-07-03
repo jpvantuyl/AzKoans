@@ -63,10 +63,14 @@ function Contemplate-AzResources {
     
     if ($null -eq $existing.Tags["Thinking"]) {
         Write-Host "`n" -ForegroundColor Green
-        New-AzResourceGroupDeployment -TemplateFile $templateFile -Name (get-date).Ticks -ResourceGroupName $rg -Verbose -TemplateParameterObject $parameters
-        $tags = $existing.Tags
-        $tags.Add("Thinking", "Done")
-        $existing | New-AzTag -Tag $tags -Verbose
+        $deploy = New-AzResourceGroupDeployment -TemplateFile $templateFile -Name (get-date).Ticks -ResourceGroupName $rg -Verbose -TemplateParameterObject $parameters
+        if ($deploy.ProvisioningState -eq "Failed") {
+            Get-AzResourceGroup -Name $rg | Remove-AzResourceGroup -Force -Verbose
+        } else {
+            $tags = $existing.Tags
+            $tags.Add("Thinking", "Done")
+            $existing | New-AzTag -Tag $tags -Verbose
+        }
     }
 }
 
