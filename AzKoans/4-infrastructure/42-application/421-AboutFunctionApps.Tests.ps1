@@ -7,7 +7,6 @@ Describe 'Function App' {
             rg           = $rg
             templateFile = "$PSScriptRoot\$num.bicep"
             parameters   = @{
-                location           = $location
                 storageAccountName = $st
                 functionAppName    = $fn
                 tags               = $tags

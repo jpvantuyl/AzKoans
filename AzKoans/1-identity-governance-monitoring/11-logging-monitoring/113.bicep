@@ -1,8 +1,8 @@
 // https://learn.microsoft.com/en-us/azure/templates/microsoft.insights/components?pivots=deployment-language-bicep
-param location string
 param appName string
 param appInsightName string
 param email string
+param location string = resourceGroup().location
 
 
 var appServicePlanName = toLower('${appName}-asp')

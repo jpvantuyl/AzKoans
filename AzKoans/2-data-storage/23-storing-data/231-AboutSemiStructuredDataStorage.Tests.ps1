@@ -6,7 +6,6 @@ Describe 'Storage Account' {
             rg           = $rg
             templateFile = "$PSScriptRoot\$num.bicep"
             parameters   = @{
-                location           = $location
                 storageAccountName = $st
             }
         }

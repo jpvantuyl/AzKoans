@@ -7,7 +7,6 @@ Describe 'Application Insights' {
             rg           = $rg
             templateFile = "$PSScriptRoot\$num.bicep"
             parameters   = @{
-                location       = $location
                 appName        = $ap
                 appInsightName = $appInsightName
                 email          = $email
