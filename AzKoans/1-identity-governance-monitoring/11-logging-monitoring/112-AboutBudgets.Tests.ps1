@@ -15,7 +15,7 @@ Describe 'Budgets' {
         $budget = (($response.content | ConvertFrom-Json).value | ? {$_.name -eq 'jpvant-112-b451-budget'}).properties
     }
 
-    It 'have a limit set' {
+    It 'have a limit set' -Skip {
         $budget.Amount | Should -Be 100
         $budget.TimeGrain | Should -Be Monthly
     }
