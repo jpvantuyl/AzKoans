@@ -50,55 +50,55 @@ resource alert 'Microsoft.Insights/activityLogAlerts@2020-10-01' = {
   }
 }
 
-resource kv 'Microsoft.KeyVault/vaults@2022-07-01' = {
-  name: '${alertName}-kv'
-  location: location
-  properties: {
-    accessPolicies: [
-      // {
-      //   objectId: 'b24988ac-6180-42a0-ab88-20f7382dd24c' //https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#contributor
-      //   tenantId: subscription().tenantId
-      //   permissions: {
-      //     keys: [
-      //       'all'
-      //     ]
-      //     secrets: [
-      //       'all'
-      //     ]
-      //   }
-      // }
-    ]
-    enableRbacAuthorization: true
-    enableSoftDelete: false
-    sku: {
-      family: 'A'
-      name: 'standard'
-    }
-    softDeleteRetentionInDays: 10
-    tenantId: subscription().tenantId
-    networkAcls: {
-      defaultAction: 'Allow'
-      bypass: 'AzureServices'
-    }
-  }
-}
+// resource kv 'Microsoft.KeyVault/vaults@2022-07-01' = {
+//   name: '${alertName}-kv'
+//   location: location
+//   properties: {
+//     accessPolicies: [
+//       {
+//         objectId: 'b24988ac-6180-42a0-ab88-20f7382dd24c' //https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#contributor
+//         tenantId: subscription().tenantId
+//         permissions: {
+//           keys: [
+//             'all'
+//           ]
+//           secrets: [
+//             'all'
+//           ]
+//         }
+//       }
+//     ]
+//     enableRbacAuthorization: true
+//     enableSoftDelete: false
+//     sku: {
+//       family: 'A'
+//       name: 'standard'
+//     }
+//     softDeleteRetentionInDays: 10
+//     tenantId: subscription().tenantId
+//     networkAcls: {
+//       defaultAction: 'Allow'
+//       bypass: 'AzureServices'
+//     }
+//   }
+// }
 
-// https://learn.microsoft.com/en-us/azure/key-vault/secrets/quick-create-bicep?tabs=CLI
-resource secret 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
-  parent: kv
-  name: 'this-secret-has-no-expiration'
-  properties: {
-    value: 'this is the secret value'
-  }
-}
+// // https://learn.microsoft.com/en-us/azure/key-vault/secrets/quick-create-bicep?tabs=CLI
+// resource secret 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+//   parent: kv
+//   name: 'this-secret-has-no-expiration'
+//   properties: {
+//     value: 'this is the secret value'
+//   }
+// }
 
-resource key 'Microsoft.KeyVault/vaults/keys@2022-07-01' = {
-  parent: kv
-  name: 'this-key-has-no-expiration'
-  properties: {
-    kty: 'EC'
-    attributes: {
-      exp: keyExpiration
-    }
-  }
-}
+// resource key 'Microsoft.KeyVault/vaults/keys@2022-07-01' = {
+//   parent: kv
+//   name: 'this-key-has-no-expiration'
+//   properties: {
+//     kty: 'EC'
+//     attributes: {
+//       exp: keyExpiration
+//     }
+//   }
+// }
