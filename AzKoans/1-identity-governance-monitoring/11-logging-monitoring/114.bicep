@@ -2,6 +2,7 @@
 param email string
 param alertName string
 param location string = resourceGroup().location
+param keyExpiration int = dateTimeToEpoch(dateTimeAdd(utcNow(), 'P3Y'))
 
 resource emailActionGroup 'microsoft.insights/actionGroups@2021-09-01' = {
   name: '${alertName}EmailActionGroup'
@@ -54,24 +55,24 @@ resource kv 'Microsoft.KeyVault/vaults@2022-07-01' = {
   location: location
   properties: {
     accessPolicies: [
-      {
-        objectId: 'b24988ac-6180-42a0-ab88-20f7382dd24c' //https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#contributor
-        tenantId: subscription().tenantId
-        permissions: {
-          keys: [
-            'all'
-          ]
-          secrets: [
-            'all'
-          ]
-        }
-      }
+      // {
+      //   objectId: 'b24988ac-6180-42a0-ab88-20f7382dd24c' //https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#contributor
+      //   tenantId: subscription().tenantId
+      //   permissions: {
+      //     keys: [
+      //       'all'
+      //     ]
+      //     secrets: [
+      //       'all'
+      //     ]
+      //   }
+      // }
     ]
-    enableRbacAuthorization: false
+    enableRbacAuthorization: true
     enableSoftDelete: false
     sku: {
       family: 'A'
-      name: 'premium'
+      name: 'standard'
     }
     softDeleteRetentionInDays: 10
     tenantId: subscription().tenantId
@@ -95,6 +96,9 @@ resource key 'Microsoft.KeyVault/vaults/keys@2022-07-01' = {
   parent: kv
   name: 'this-key-has-no-expiration'
   properties: {
-    kty: 'EC-HSM'
+    kty: 'EC'
+    attributes: {
+      exp: keyExpiration
+    }
   }
 }

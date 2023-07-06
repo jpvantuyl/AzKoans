@@ -1,12 +1,12 @@
-Describe 'Function App' {
+Describe 'Virtual Machine' {
     BeforeAll {
         $rg = "$prefix-$num-$uniqueHash"
-        $st = "$prefix$($num)st$uniqueHash"
-        $fn = "$($prefix)-$num-fn-$uniqueHash"
+        $vm = "$rg-vm"
         $splat = @{
             rg           = $rg
             templateFile = "$PSScriptRoot\$num.bicep"
             parameters   = @{
+                vmName             = $vm
                 adminUsername      = New-Guid
                 adminPasswordOrKey = New-Guid
                 # storageAccountName = $st
@@ -15,17 +15,20 @@ Describe 'Function App' {
             }
         }
         Contemplate-AzResources @splat
-        $functionApp = Get-AzFunctionApp -ResourceGroupName $rg -Name $fn
+        $virtualMachine = Get-AzVM -ResourceGroupName $rg -Name $vm
     }
 
     It 'is in a good state' {
-        $functionApp.Status | Should -Be "Running"
+        $virtualMachine.ProvisioningState | Should -Be "Succeeded"
     }
-        
-    It 'renders a page' {
-        $response = Invoke-WebRequest -Uri "https://$fn.azurewebsites.net"
-        $response.StatusCode | Should -Be 200
-        $response.Content | Should -BeLike "*Azure Functions is an event-based serverless compute experience to accelerate your development*"
+
+    It 'is cheap' {
+        $virtualMachine.HardwareProfile.VmSize | Should -Be "Standard_B1s"
+    }
+
+    It 'has an OS' {
+        $virtualMachine.OSProfile.WindowsConfiguration -eq $null | Should -Be $true
+        $virtualMachine.OSProfile.LinuxConfiguration -eq $null | Should -Be $false
     }
 
     AfterAll {

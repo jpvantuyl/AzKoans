@@ -66,6 +66,7 @@ function Contemplate-AzResources {
         $deploy = New-AzResourceGroupDeployment -TemplateFile $templateFile -Name (get-date).Ticks -ResourceGroupName $rg -Verbose -TemplateParameterObject $parameters
         if ($deploy.ProvisioningState -eq "Failed") {
             Get-AzResourceGroup -Name $rg | Remove-AzResourceGroup -Force -Verbose
+            exit
         } else {
             $tags = $existing.Tags
             $tags.Add("Thinking", "Done")
