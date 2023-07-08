@@ -372,7 +372,7 @@ $koans | ForEach-Object {
 
 
 Write-Host "`nYou have completed all $PassedCount AzKoans`n" -ForegroundColor Green
-Write-Host "`nPlease delete any Azure infrastructure you no longer need`n" -ForegroundColor Yellow
+Write-Host "`nPlease delete any Azure infrastructure you no longer need (Take-DeepBreath.ps1)`n" -ForegroundColor Yellow
 Write-Host @"
 
 “Before one studies Zen, mountains are mountains and waters are waters;
