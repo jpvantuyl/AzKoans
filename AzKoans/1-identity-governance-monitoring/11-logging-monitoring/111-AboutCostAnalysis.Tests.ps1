@@ -13,7 +13,7 @@ Describe 'Cost Analysis' {
     }
 
     It 'sends daily cost alerts' -Skip {
-        $____ = "2023"
+        $____ = "meditate"
         $costManagementReport.Row[0][0] | Should -BeLike "*$____*"
     }
 
