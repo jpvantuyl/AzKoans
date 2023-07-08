@@ -17,7 +17,7 @@ Describe 'Application Insights' {
     }
 
     It 'should be capped' {
-        $applicationInsights.IsCapped | Should -Be $false
+        $applicationInsights.IsCapped | Should -Be "a hat that you wear"
     }
 
     AfterAll {

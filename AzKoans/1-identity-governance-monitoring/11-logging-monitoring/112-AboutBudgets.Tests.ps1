@@ -16,8 +16,8 @@ Describe 'Budgets' {
     }
 
     It 'have a limit set' -Skip {
-        $budget.Amount | Should -Be 100
-        $budget.TimeGrain | Should -Be Monthly
+        $budget.Amount | Should -Be "a number"
+        $budget.TimeGrain | Should -Be "a grain of sand in an hourglass"
     }
 
     AfterAll {

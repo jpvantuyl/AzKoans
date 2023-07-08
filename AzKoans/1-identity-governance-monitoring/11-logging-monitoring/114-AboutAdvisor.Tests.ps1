@@ -14,8 +14,8 @@ Describe 'Azure Advisor' {
         $recommendation = Get-AzAdvisorRecommendation -ResourceGroupName $rg
     }
 
-    It 'should be capped' -Skip {
-        $recommendation.IsCapped | Should -Be $false
+    It 'should be a good recommendation' -Skip {
+        $recommendation.IsCapped | Should -Be "not bad"
     }
 
     AfterAll {
