@@ -1,4 +1,3 @@
-param($num, $location, $prefix, $uniqueHash, $tags)
 Describe 'Function App' {
     BeforeAll {
         $rg = "$prefix-$num-$uniqueHash"
@@ -6,9 +5,8 @@ Describe 'Function App' {
         $fn = "$($prefix)-$num-fn-$uniqueHash"
         $splat = @{
             rg           = $rg
-            templateFile = "$PSScriptRoot\main.bicep"
+            templateFile = "$PSScriptRoot\$num.bicep"
             parameters   = @{
-                location           = $location
                 storageAccountName = $st
                 functionAppName    = $fn
                 tags               = $tags
@@ -19,13 +17,13 @@ Describe 'Function App' {
     }
 
     It 'is in a good state' {
-        $functionApp.Status | Should -Be $____
+        $functionApp.Status | Should -Be "Running"
     }
         
     It 'renders a page' {
         $response = Invoke-WebRequest -Uri "https://$fn.azurewebsites.net"
-        $response.StatusCode | Should -Be $____
-        $response.Content | Should -BeLike "*mountains are merely mountains*"
+        $response.StatusCode | Should -Be 200
+        $response.Content | Should -BeLike "*Azure Functions is an event-based serverless compute experience to accelerate your development*"
     }
 
     AfterAll {

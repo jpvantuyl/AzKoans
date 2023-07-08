@@ -1,7 +1,7 @@
-param location string
 param storageAccountName string
 param functionAppName string
 param tags object
+param location string = resourceGroup().location
 
 // https://azure.github.io/bicep-registry-modules/#storage
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
