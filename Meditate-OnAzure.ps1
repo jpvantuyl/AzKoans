@@ -6,6 +6,23 @@ if (-not ((Get-Module -Name Pester -ListAvailable) -or (Get-Module -Name Pester 
     # Update-Module -Name Pester -Force
 }
 
+if (-not (Test-Path -Path ".\config.json")) {
+    $config = @"
+{
+    "subscriptionId": "b7445981-7fd4-4c5b-831c-41a5bc4900d0",
+    "location": "EastUS",
+    "prefix": "jpvant",
+    "tags": {
+        "Owner": "Chris Hunt",
+        "Technical-Contact": "John Van Tuyl"
+    }
+}
+"@
+    $config | Out-File -FilePath ".\config.json" -Encoding utf8BOM
+    throw "Edit `config.json` before continuing on your path"
+}
+
+
 # https://learn.microsoft.com/en-us/powershell/azure/install-azps-windows?view=azps-10.0.0&tabs=powershell&pivots=windows-psgallery
 $requiredModules = @('Az', 'Az.CostManagement')
 $requiredModules | ForEach-Object {
@@ -17,7 +34,7 @@ $requiredModules | ForEach-Object {
     }
 }
 
-if (-not (Test-Path "$env:USERPROFILE\.bicep")) {
+if (-not (Test-Path -Path "$env:USERPROFILE\.bicep")) {
     Write-Warning "Bicep CLI not found.  Installing...`n"
     pause
 
