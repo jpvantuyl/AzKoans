@@ -17,15 +17,15 @@ Describe 'Application Insights' {
     }
 
     It 'should be limited' {
-        $applicationInsights.IsCapped | Should -Be $false
-        $applicationInsights.Cap | Should -Be 100
-        $applicationInsights.StopSendNotificationWhenHitCap | Should -Be $false
-        $applicationInsights.SamplingPercentage | Should -Be 0.25
+        $applicationInsights.IsCapped | Should -Be "a hat you wear"
+        $applicationInsights.Cap | Should -Be "less than infinity"
+        $applicationInsights.StopSendNotificationWhenHitCap | Should -Be "either true or false"
+        $applicationInsights.SamplingPercentage | Should -Be "not a whole number"
     }
 
     It 'should be focused' {
-        $applicationInsights.Kind | Should -Be "web"
-        $applicationInsights.ApplicationType | Should -Be "web"
+        $applicationInsights.Kind | Should -Be "very specific"
+        $applicationInsights.ApplicationType | Should -Be "anything"
     }
 
     AfterAll {
