@@ -4,7 +4,6 @@ param appInsightName string
 param email string
 param location string = resourceGroup().location
 
-
 var appServicePlanName = toLower('${appName}-asp')
 var webSiteName = toLower('${appName}-wapp')
 var logAnalyticsName = toLower('${appName}-la')
@@ -45,24 +44,24 @@ resource appService 'Microsoft.Web/sites@2020-06-01' = {
   }
 }
 
-resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = {
-  parent: appService
-  name: 'appsettings'
-  properties: {
-    APPINSIGHTS_INSTRUMENTATIONKEY: appInsights.properties.InstrumentationKey
-  }
-  dependsOn: [
-    appServiceSiteExtension
-  ]
-}
+// resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = {
+//   parent: appService
+//   name: 'appsettings'
+//   properties: {
+//     APPINSIGHTS_INSTRUMENTATIONKEY: appInsights.properties.InstrumentationKey
+//   }
+//   dependsOn: [
+//     appServiceSiteExtension
+//   ]
+// }
 
-resource appServiceSiteExtension 'Microsoft.Web/sites/siteextensions@2020-06-01' = {
-  parent: appService
-  name: 'Microsoft.ApplicationInsights.AzureWebSites'
-  dependsOn: [
-    appInsights
-  ]
-}
+// resource appServiceSiteExtension 'Microsoft.Web/sites/siteextensions@2020-06-01' = {
+//   parent: appService
+//   name: 'Microsoft.ApplicationInsights.AzureWebSites'
+//   dependsOn: [
+//     appInsights
+//   ]
+// }
 
 resource appServiceAppSettings 'Microsoft.Web/sites/config@2020-06-01' = {
   parent: appService
@@ -98,6 +97,9 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
   properties: {
     Application_Type: 'web'
+    // ImmediatePurgeDataOn30Days: true
+    RetentionInDays: 30
+    SamplingPercentage: json('0.25')
     WorkspaceResourceId: logAnalyticsWorkspace.id
   }
 }
@@ -118,6 +120,10 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-08
       searchVersion: 1
       legacy: 0
       enableLogAccessUsingOnlyResourcePermissions: true
+      immediatePurgeDataOn30Days: true
+    }
+    workspaceCapping: {
+      dailyQuotaGb: 1
     }
   }
 }
@@ -156,14 +162,14 @@ resource metricAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
 }
 
 resource emailActionGroup 'microsoft.insights/actionGroups@2019-06-01' = {
-  name: 'emailActionGroup'
+  name: '${responseAlertName}-action-group'
   location: 'global'
   properties: {
-    groupShortName: 'string'
+    groupShortName: substring('${responseAlertName}-action-group', 0, 12)
     enabled: true
     emailReceivers: [
       {
-        name: 'Example'
+        name: '${responseAlertName}-action-group'
         emailAddress: email
         useCommonAlertSchema: true
       }

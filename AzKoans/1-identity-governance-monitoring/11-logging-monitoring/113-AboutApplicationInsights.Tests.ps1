@@ -16,8 +16,16 @@ Describe 'Application Insights' {
         $applicationInsights = Get-AzApplicationInsights -Name $appInsightName -ResourceGroupName $rg -Full
     }
 
-    It 'should be capped' {
+    It 'should be limited' {
         $applicationInsights.IsCapped | Should -Be $false
+        $applicationInsights.Cap | Should -Be 100
+        $applicationInsights.StopSendNotificationWhenHitCap | Should -Be $false
+        $applicationInsights.SamplingPercentage | Should -Be 0.25
+    }
+
+    It 'should be focused' {
+        $applicationInsights.Kind | Should -Be "web"
+        $applicationInsights.ApplicationType | Should -Be "web"
     }
 
     AfterAll {
