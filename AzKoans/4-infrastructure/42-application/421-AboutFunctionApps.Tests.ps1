@@ -17,13 +17,13 @@ Describe 'Function App' {
     }
 
     It 'is in a good state' {
-        $functionApp.Status | Should -Be "you must walk before you can run"
+        $functionApp.Status | Should -Be "Running"
     }
         
     It 'renders a page' {
         $response = Invoke-WebRequest -Uri "https://$fn.azurewebsites.net"
-        $response.StatusCode | Should -Be "a number that is not a number"
-        $response.Content | Should -BeLike "*the cloud is just someone else's computers*"
+        $response.StatusCode | Should -Be 200
+        $response.Content | Should -BeLike "*Azure Functions is an event-based serverless compute experience to accelerate your development*"
     }
 
     AfterAll {

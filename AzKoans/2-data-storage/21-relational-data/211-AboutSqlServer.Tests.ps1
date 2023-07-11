@@ -11,20 +11,21 @@ Describe 'SQL Server' {
                 sqlDBName                  = $db
                 administratorLogin         = New-Guid
                 administratorLoginPassword = New-Guid
+                tags                       = $tags
             }
         }
         Contemplate-AzResources @splat
         $sqlServer = Get-AzSqlServer -ResourceGroupName $rg -Name $sql
-        $database = Get-AzSqlDatabase -ResourceGroupName $rg -DatabaseName $db
-        if (-not $database.Tags.ContainsKey("Database")) {
-    #         Restore-SqlDatabase `
-	# -ReplaceDatabase `
-	# -ServerInstance . `
-	# -Database "SampleDatabase" `
-	# -BackupFile "$pwd\AdventureWorks2016.bak" `
-	# -RelocateFile $relocateFiles `
-	-Credential $credentials; 
-        }
+        $database = Get-AzSqlDatabase -ResourceGroupName $rg -DatabaseName $db -ServerName $sql
+        # if (-not $database.Tags.ContainsKey("Database")) {
+        #             Restore-SqlDatabase `
+        #     -ReplaceDatabase `
+        #     -ServerInstance . `
+        #     -Database "SampleDatabase" `
+        #     -BackupFile "$pwd\AdventureWorks2016.bak" `
+        #     -RelocateFile $relocateFiles `
+        #     -Credential $credentials; 
+        # }
         # https://github.com/Azure/azure-quickstart-templates/blob/master/quickstarts/microsoft.datamigration/azure-database-migration-service/AdventureWorks2016.bak
     }
 
