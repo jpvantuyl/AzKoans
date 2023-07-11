@@ -9,9 +9,7 @@ Describe 'Virtual Machine' {
                 vmName             = $vm
                 adminUsername      = New-Guid
                 adminPasswordOrKey = New-Guid
-                # storageAccountName = $st
-                # functionAppName    = $fn
-                # tags               = $tags
+                tags               = $tags
             }
         }
         Contemplate-AzResources @splat

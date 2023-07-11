@@ -49,6 +49,8 @@ param networkSecurityGroupName string = 'SecGroupNet'
 ])
 param securityType string = 'TrustedLaunch'
 
+param tags object
+
 var imageReference = {
   'Ubuntu-1804': {
     publisher: 'Canonical'
@@ -101,6 +103,7 @@ var maaEndpoint = substring('emptystring', 0, 0)
 resource networkInterface 'Microsoft.Network/networkInterfaces@2021-05-01' = {
   name: networkInterfaceName
   location: location
+  tags: tags
   properties: {
     ipConfigurations: [
       {
@@ -125,6 +128,7 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2021-05-01' = {
 resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
   name: networkSecurityGroupName
   location: location
+  tags: tags
   properties: {
     securityRules: [
       {
@@ -147,6 +151,7 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2021-05-0
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: virtualNetworkName
   location: location
+  tags: tags
   properties: {
     addressSpace: {
       addressPrefixes: [
@@ -169,6 +174,7 @@ resource subnet 'Microsoft.Network/virtualNetworks/subnets@2021-05-01' = {
 resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
   name: publicIPAddressName
   location: location
+  tags: tags
   sku: {
     name: 'Basic'
   }
@@ -185,6 +191,7 @@ resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
 resource vm 'Microsoft.Compute/virtualMachines@2021-11-01' = {
   name: vmName
   location: location
+  tags: tags
   properties: {
     hardwareProfile: {
       vmSize: vmSize
@@ -219,6 +226,7 @@ resource vmExtension 'Microsoft.Compute/virtualMachines/extensions@2022-03-01' =
   parent: vm
   name: extensionName
   location: location
+  tags: tags
   properties: {
     publisher: extensionPublisher
     type: extensionName
@@ -235,7 +243,3 @@ resource vmExtension 'Microsoft.Compute/virtualMachines/extensions@2022-03-01' =
     }
   }
 }
-
-output adminUsername string = adminUsername
-output hostname string = publicIPAddress.properties.dnsSettings.fqdn
-output sshCommand string = 'ssh ${adminUsername}@${publicIPAddress.properties.dnsSettings.fqdn}'
