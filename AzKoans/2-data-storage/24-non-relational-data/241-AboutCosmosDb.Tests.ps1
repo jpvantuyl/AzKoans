@@ -1,4 +1,4 @@
-Describe 'Storage Account' {
+Describe 'Cosmos DB' {
     BeforeAll {
         $rg = "$prefix-$num-$uniqueHash"
         $act = "$rg-cosmos"
