@@ -14,30 +14,30 @@ Describe 'Cosmos DB' {
     }
 
     It 'has a type' {
-        $cosmosDb.DatabaseAccountOfferType | Should -Be "Standard"
+        $cosmosDb.DatabaseAccountOfferType | Should -Be "an offering"
     }
 
     It 'is available on the internet' {
-        $cosmosDb.PublicNetworkAccess | Should -Be "Enabled"
+        $cosmosDb.PublicNetworkAccess | Should -Be "out there"
     }
 
     It 'can write from multiple locations' {
-        $cosmosDb.EnableMultipleWriteLocations | Should -Be $false
-        $cosmosDb.Locations.Count | Should -Be 1
+        $cosmosDb.EnableMultipleWriteLocations | Should -Be "sometimes yes and sometimes no"
+        $cosmosDb.Locations.Count | Should -Be "all the regions in the world"
     }
 
     It 'has a consistency policy' {
-        $cosmosDb.ConsistencyPolicy.DefaultConsistencyLevel | Should -Be "Session"
+        $cosmosDb.ConsistencyPolicy.DefaultConsistencyLevel | Should -Be "a good strategy"
     }
 
     It 'has automatic failover' {
-        $cosmosDb.EnableAutomaticFailover | Should -Be $false
-        $cosmosDb.FailoverPolicies.Count | Should -Be 1
+        $cosmosDb.EnableAutomaticFailover | Should -Be "less stressful"
+        $cosmosDb.FailoverPolicies.Count | Should -Be "more than zero"
     }
 
     It 'has analytical storage' {
-        $cosmosDb.EnableAnalyticalStorage | Should -Be $true
-        $cosmosDb.AnalyticalStorageConfiguration.SchemaType | Should -Be "WellDefined"
+        $cosmosDb.EnableAnalyticalStorage | Should -Be "a place of contemplation"
+        $cosmosDb.AnalyticalStorageConfiguration.SchemaType | Should -Be "wishy-washy"
     }
 
     AfterAll {

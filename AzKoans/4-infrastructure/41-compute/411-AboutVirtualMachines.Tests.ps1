@@ -17,16 +17,16 @@ Describe 'Virtual Machine' {
     }
 
     It 'is in a good state' {
-        $virtualMachine.ProvisioningState | Should -Be "Succeeded"
+        $virtualMachine.ProvisioningState | Should -Be "happy"
     }
 
     It 'is cheap' {
-        $virtualMachine.HardwareProfile.VmSize | Should -Be "Standard_B1s"
+        $virtualMachine.HardwareProfile.VmSize | Should -Be "a word, a symbol, an uppercase letter, a lowercase letter, and a number"
     }
 
     It 'has an OS' {
-        $virtualMachine.OSProfile.WindowsConfiguration -eq $null | Should -Be $true
-        $virtualMachine.OSProfile.LinuxConfiguration -eq $null | Should -Be $false
+        $virtualMachine.OSProfile.WindowsConfiguration -eq $null | Should -Be "empty"
+        $virtualMachine.OSProfile.LinuxConfiguration -eq $null | Should -Be "full"
     }
 
     AfterAll {

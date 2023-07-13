@@ -16,29 +16,29 @@ Describe 'Hub and Spoke' {
     }
 
     It 'is in a good state' {
-        $virtualNetwork.ProvisioningState | Should -Be "Succeeded"
+        $virtualNetwork.ProvisioningState | Should -Be "well fed"
     }
 
     It 'has an allocated address space' {
-        $virtualNetwork.AddressSpace.AddressPrefixes | Should -Be "10.0.0.0/16"
+        $virtualNetwork.AddressSpace.AddressPrefixes | Should -Be "park place"
     }
 
     It 'is protected from distributed denial of service' {
-        $virtualNetwork.EnableDdosProtection | Should -Be $false
+        $virtualNetwork.EnableDdosProtection | Should -Be "how much will this cost me?"
     }
 
     It 'should be peered' {
-        $virtualNetwork.VirtualNetworkPeerings.PeeringState | Should -Be "Connected"
-        $virtualNetwork.VirtualNetworkPeerings.AllowVirtualNetworkAccess | Should -Be $true
-        $virtualNetwork.VirtualNetworkPeerings.AllowForwardedTraffic | Should -Be $false
-        $virtualNetwork.VirtualNetworkPeerings.AllowGatewayTransit | Should -Be $false
-        $virtualNetwork.VirtualNetworkPeerings.UseRemoteGateways | Should -Be $false
-        $virtualNetwork.VirtualNetworkPeerings.PeeredRemoteAddressSpace.AddressPrefixes | Should -Be "10.1.0.0/16"
+        $virtualNetwork.VirtualNetworkPeerings.PeeringState | Should -Be "friends"
+        $virtualNetwork.VirtualNetworkPeerings.AllowVirtualNetworkAccess | Should -Be "why not?"
+        $virtualNetwork.VirtualNetworkPeerings.AllowForwardedTraffic | Should -Be "just passing through"
+        $virtualNetwork.VirtualNetworkPeerings.AllowGatewayTransit | Should -Be "I took the bus once"
+        $virtualNetwork.VirtualNetworkPeerings.UseRemoteGateways | Should -Be "it depends"
+        $virtualNetwork.VirtualNetworkPeerings.PeeredRemoteAddressSpace.AddressPrefixes | Should -Be "in cidr format"
     }
 
     It 'should have a subnet' {
-        $virtualNetwork.Subnets.AddressPrefix | Should -Be "10.0.0.0/26"
-        $virtualNetwork.Subnets.PrivateLinkServiceNetworkPolicies | Should -Be $true
+        $virtualNetwork.Subnets.AddressPrefix | Should -Be "not too big"
+        $virtualNetwork.Subnets.PrivateLinkServiceNetworkPolicies | Should -Be "the opposite of public"
     }
 
     AfterAll {

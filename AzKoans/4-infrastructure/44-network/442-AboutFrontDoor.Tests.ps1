@@ -15,35 +15,28 @@ Describe 'Front Door' {
     }
 
     It 'is in a good state' {
-        $frontDoor.ProvisioningState | Should -Be "Succeeded"
-        $frontDoor.ResourceState | Should -Be "Enabled"
-        $frontDoor.EnabledState | Should -Be "Enabled"
+        $frontDoor.ProvisioningState | Should -Be "good"
+        $frontDoor.ResourceState | Should -Be "good"
+        $frontDoor.EnabledState | Should -Be "good"
     }
 
     It 'should balance the load' {
-        $frontDoor.LoadBalancingSettings.SampleSize | Should -Be 4
-        $frontDoor.LoadBalancingSettings.SuccessfulSamplesRequired | Should -Be 2
+        $frontDoor.LoadBalancingSettings.SampleSize | Should -Be "more"
+        $frontDoor.LoadBalancingSettings.SuccessfulSamplesRequired | Should -Be "less"
     }
 
     It 'should be healthy' {
-        $frontDoor.HealthProbeSettings.Path | Should -Be "/"
-        $frontDoor.HealthProbeSettings.Protocol | Should -Be "Http"
-        $frontDoor.HealthProbeSettings.IntervalInSeconds | Should -Be 120
-        $frontDoor.HealthProbeSettings.HealthProbeMethod | Should -Be "Get"
-    }
-
-    It 'should be healthy' {
-        $frontDoor.HealthProbeSettings.Path | Should -Be "/"
-        $frontDoor.HealthProbeSettings.Protocol | Should -Be "Http"
-        $frontDoor.HealthProbeSettings.IntervalInSeconds | Should -Be 120
-        $frontDoor.HealthProbeSettings.HealthProbeMethod | Should -Be "Get"
+        $frontDoor.HealthProbeSettings.Path | Should -Be "the way"
+        $frontDoor.HealthProbeSettings.Protocol | Should -Be "droid"
+        $frontDoor.HealthProbeSettings.IntervalInSeconds | Should -Be 2
+        $frontDoor.HealthProbeSettings.HealthProbeMethod | Should -Be "chosen"
     }
 
     It 'redirect to a secure connection' {
-        $frontDoor.RoutingRules.AcceptedProtocols | Should -Be "Http"
-        $frontDoor.RoutingRules.PatternsToMatch | Should -Be "/*"
-        $frontDoor.RoutingRules.RouteConfiguration.RedirectType | Should -Be "Moved"
-        $frontDoor.RoutingRules.RouteConfiguration.RedirectProtocol | Should -Be "HttpsOnly"
+        $frontDoor.RoutingRules.AcceptedProtocols | Should -Be "acceptable"
+        $frontDoor.RoutingRules.PatternsToMatch | Should -Be "all of them"
+        $frontDoor.RoutingRules.RouteConfiguration.RedirectType | Should -Be 302
+        $frontDoor.RoutingRules.RouteConfiguration.RedirectProtocol | Should -Be 443
     }
 
     AfterAll {

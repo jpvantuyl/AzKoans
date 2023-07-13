@@ -30,7 +30,7 @@ Describe 'SQL Server' {
     }
 
     It 'has a version' {
-        $sqlServer.ServerVersion | Should -Be 12.0
+        $sqlServer.ServerVersion | Should -Be -1
     }
 
     AfterAll {
