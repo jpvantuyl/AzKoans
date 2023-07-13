@@ -12,11 +12,33 @@ Describe 'Hub and Spoke' {
             }
         }
         Contemplate-AzResources @splat
-        $virtualNetwork = Get-AzVirtualNetwork -ResourceGroupName $myResourceGroup -Name $vnet
+        $virtualNetwork = Get-AzVirtualNetwork -ResourceGroupName $rg -Name $vnet
     }
 
     It 'is in a good state' {
-        $virtualNetwork.Status | Should -Be "Running"
+        $virtualNetwork.ProvisioningState | Should -Be "Succeeded"
+    }
+
+    It 'has an allocated address space' {
+        $virtualNetwork.AddressSpace.AddressPrefixes | Should -Be "10.0.0.0/16"
+    }
+
+    It 'is protected from distributed denial of service' {
+        $virtualNetwork.EnableDdosProtection | Should -Be $false
+    }
+
+    It 'should be peered' {
+        $virtualNetwork.VirtualNetworkPeerings.PeeringState | Should -Be "Connected"
+        $virtualNetwork.VirtualNetworkPeerings.AllowVirtualNetworkAccess | Should -Be $true
+        $virtualNetwork.VirtualNetworkPeerings.AllowForwardedTraffic | Should -Be $false
+        $virtualNetwork.VirtualNetworkPeerings.AllowGatewayTransit | Should -Be $false
+        $virtualNetwork.VirtualNetworkPeerings.UseRemoteGateways | Should -Be $false
+        $virtualNetwork.VirtualNetworkPeerings.PeeredRemoteAddressSpace.AddressPrefixes | Should -Be "10.1.0.0/16"
+    }
+
+    It 'should have a subnet' {
+        $virtualNetwork.Subnets.AddressPrefix | Should -Be "10.0.0.0/26"
+        $virtualNetwork.Subnets.PrivateLinkServiceNetworkPolicies | Should -Be $true
     }
 
     AfterAll {
