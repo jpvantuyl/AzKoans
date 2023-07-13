@@ -32,13 +32,6 @@ Describe 'Front Door' {
         $frontDoor.HealthProbeSettings.HealthProbeMethod | Should -Be "Get"
     }
 
-    It 'should be healthy' {
-        $frontDoor.HealthProbeSettings.Path | Should -Be "/"
-        $frontDoor.HealthProbeSettings.Protocol | Should -Be "Http"
-        $frontDoor.HealthProbeSettings.IntervalInSeconds | Should -Be 120
-        $frontDoor.HealthProbeSettings.HealthProbeMethod | Should -Be "Get"
-    }
-
     It 'redirect to a secure connection' {
         $frontDoor.RoutingRules.AcceptedProtocols | Should -Be "Http"
         $frontDoor.RoutingRules.PatternsToMatch | Should -Be "/*"
