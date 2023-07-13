@@ -1,29 +1,49 @@
-Describe 'Function App' {
+Describe 'Front Door' {
     BeforeAll {
         $rg = "$prefix-$num-$uniqueHash"
-        $st = "$prefix$($num)st$uniqueHash"
-        $fn = "$($prefix)-$num-fn-$uniqueHash"
+        $fd = "$rg-front-door"
         $splat = @{
             rg           = $rg
             templateFile = "$PSScriptRoot\$num.bicep"
             parameters   = @{
-                storageAccountName = $st
-                functionAppName    = $fn
-                tags               = $tags
+                frontDoorName = $fd
+                backendAddress    = "google.com"
             }
         }
         Contemplate-AzResources @splat
-        $functionApp = Get-AzFunctionApp -ResourceGroupName $rg -Name $fn
+        $frontDoor = Get-AzFrontDoor -ResourceGroupName $rg -Name $fd
     }
 
     It 'is in a good state' {
-        $functionApp.Status | Should -Be "Running"
+        $frontDoor.ProvisioningState | Should -Be "Succeeded"
+        $frontDoor.ResourceState | Should -Be "Enabled"
+        $frontDoor.EnabledState | Should -Be "Enabled"
     }
-        
-    It 'renders a page' {
-        $response = Invoke-WebRequest -Uri "https://$fn.azurewebsites.net"
-        $response.StatusCode | Should -Be 200
-        $response.Content | Should -BeLike "*Azure Functions is an event-based serverless compute experience to accelerate your development*"
+
+    It 'should balance the load' {
+        $frontDoor.LoadBalancingSettings.SampleSize | Should -Be 4
+        $frontDoor.LoadBalancingSettings.SuccessfulSamplesRequired | Should -Be 2
+    }
+
+    It 'should be healthy' {
+        $frontDoor.HealthProbeSettings.Path | Should -Be "/"
+        $frontDoor.HealthProbeSettings.Protocol | Should -Be "Http"
+        $frontDoor.HealthProbeSettings.IntervalInSeconds | Should -Be 120
+        $frontDoor.HealthProbeSettings.HealthProbeMethod | Should -Be "Get"
+    }
+
+    It 'should be healthy' {
+        $frontDoor.HealthProbeSettings.Path | Should -Be "/"
+        $frontDoor.HealthProbeSettings.Protocol | Should -Be "Http"
+        $frontDoor.HealthProbeSettings.IntervalInSeconds | Should -Be 120
+        $frontDoor.HealthProbeSettings.HealthProbeMethod | Should -Be "Get"
+    }
+
+    It 'redirect to a secure connection' {
+        $frontDoor.RoutingRules.AcceptedProtocols | Should -Be "Http"
+        $frontDoor.RoutingRules.PatternsToMatch | Should -Be "/*"
+        $frontDoor.RoutingRules.RouteConfiguration.RedirectType | Should -Be "Moved"
+        $frontDoor.RoutingRules.RouteConfiguration.RedirectProtocol | Should -Be "HttpsOnly"
     }
 
     AfterAll {
