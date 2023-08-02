@@ -16,6 +16,8 @@ Microsoft has a [study guide](https://learn.microsoft.com/en-us/certifications/r
 
 And [Azure Charts](https://azurecharts.com/overview) has a nice overview of all the Azure services.
 
+Many of these services are available in limited quantities [for free](https://azure.microsoft.com/en-in/pricing/free-services/).
+
 ## Setup
 
 First, edit the `config.json` so that it has your personal details.  You'll need a subscription and either some credits or a credit card.  Microsoft has one month free at the moment as well as student credits and credits for developers with Visual Studio subscriptions.
