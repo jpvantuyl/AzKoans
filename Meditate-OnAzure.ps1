@@ -93,6 +93,10 @@ function Contemplate-AzResources {
         New-AzResourceGroup -Location $config.location -Name $rg -Tag $config.tags -Verbose
         $existing = Get-AzResourceGroup -Name "*$rg"
     }
+
+    $tags = $existing.Tags
+    $tags.Add("ExpireAt", (Get-Date).AddHours(2))
+    $existing | New-AzTag -Tag $tags -Verbose
     
     if ($null -eq $existing.Tags["Thinking"]) {
         Write-Host "`n" -ForegroundColor Green
