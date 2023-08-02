@@ -14,6 +14,8 @@ PluralSight also has paths for [AZ-303](https://app.pluralsight.com/paths/certif
 
 Microsoft has a [study guide](https://learn.microsoft.com/en-us/certifications/resources/study-guides/AZ-305) with the current requirements.
 
+And [Azure Charts](https://azurecharts.com/overview) has a nice overview of all the Azure services.
+
 ## Setup
 
 First, edit the `config.json` so that it has your personal details.  You'll need a subscription and either some credits or a credit card.  Microsoft has one month free at the moment as well as student credits and credits for developers with Visual Studio subscriptions.
